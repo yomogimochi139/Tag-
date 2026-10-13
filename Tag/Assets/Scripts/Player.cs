@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
+using TMPro;
 
 public class Player : MonoBehaviour
 {
@@ -14,6 +16,9 @@ public class Player : MonoBehaviour
     public float mouseSensitivity = 2f;
 
     public bool husKey = false;
+
+    [SerializeField] private TextMeshProUGUI messageText;
+    private float messageTimer = 0f;
 
     void Start()
     {
@@ -67,7 +72,7 @@ public class Player : MonoBehaviour
         if (other.CompareTag("Key"))
         {
             husKey = true;
-            Debug.Log("鍵を入手した");
+            ShowMessage("鍵を入手した");
             Destroy(other.gameObject);
         }
 
@@ -75,18 +80,28 @@ public class Player : MonoBehaviour
         {
             if(husKey)
             {
-                Debug.Log("クリア！");
+                //ShowMessage("クリア！");
+                SceneManager.LoadScene("GameClear");
             }
             else
             {
-                Debug.Log("鍵がかかっていて開かない");
+                ShowMessage("鍵がかかっていて開かない");
             }
         }
 
         if(other.CompareTag("Enemy"))
         {
-            Debug.Log("ゲームオーバー");
+            //ShowMessage("ゲームオーバー");
+            SceneManager.LoadScene("GameOver");
+        }
+    }
 
+    private void ShowMessage(string message)
+    {
+        if(messageText != null)
+        {
+            messageText.text = message;
+            messageTimer = 2f;
         }
     }
 }
